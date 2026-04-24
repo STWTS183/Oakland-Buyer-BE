@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sean Walsh | Agent Dashboard</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    :root{
+      --navy:#0f2240;--navy2:#1a3a5c;--navy3:#254d7a;
+      --gold:#c9a227;--gold2:#f0c93a;
+      --white:#fff;--gray50:#f9fafb;--gray100:#f3f4f6;
+      --gray200:#e5e7eb;--gray400:#9ca3af;--gray600:#4b5563;--gray800:#1f2937;
+      --green:#10b981;--red:#ef4444;--red2:#fee2e2;
+      --shadow:0 1px 3px rgba(0,0,0,.12),0 1px 2px rgba(0,0,0,.08);
+      --shadow-md:0 4px 6px rgba(0,0,0,.1),0 2px 4px rgba(0,0,0,.08);
+      --radius:8px;
+    }
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--gray100);color:var(--gray800);height:100vh;display:flex;flex-direction:column;overflow:hidden;}
+
+    /* TOP NAV */
+    nav{background:var(--navy);color:var(--white);display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:60px;flex-shrink:0;box-shadow:var(--shadow-md);}
+    .nav-brand{display:flex;align-items:center;gap:12px;}
+    .nav-logo{width:36px;height:36px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;color:var(--navy);}
+    .nav-title{font-size:17px;font-weight:600;letter-spacing:.3px;}
+    .nav-sub{font-size:12px;color:rgba(255,255,255,.55);margin-top:1px;}
+    .nav-badge{background:rgba(201,162,39,.2);border:1px solid rgba(201,162,39,.4);color:var(--gold2);font-size:11px;padding:3px 10px;border-radius:20px;font-weight:500;}
+
+    /* LAYOUT */
+    .layout{display:flex;flex:1;overflow:hidden;}
+
+    /* SIDEBAR */
+    .sidebar{width:280px;background:var(--navy2);display:flex;flex-direction:column;flex-shrink:0;border-right:1px solid rgba(255,255,255,.07);}
+    .sidebar-header{padding:16px;}
+    .btn-new{width:100%;background:var(--gold);color:var(--navy);border:none;border-radius:var(--radius);padding:10px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:background .15s;}
+    .btn-new:hover{background:var(--gold2);}
+    .search-wrap{padding:0 16px 12px;}
+    .search-wrap input{width:100%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:var(--radius);padding:8px 12px;color:var(--white);font-size:13px;outline:none;}
+    .search-wrap input::placeholder{color:rgba(255,255,255,.35);}
+    .search-wrap input:focus{border-color:rgba(201,162,39,.5);background:rgba(255,255,255,.12);}
+    .contacts-list{flex:1;overflow-y:auto;padding:0 8px 16px;}
+    .contacts-list::-webkit-scrollbar{width:4px;}
+    .contacts-list::-webkit-scrollbar-thumb{background:rgba(255,255,255,.15);border-radius:2px;}
+    .contact-item{padding:12px 12px;border-radius:var(--radius);cursor:pointer;margin-bottom:2px;transition:background .12s;border:1px solid transparent;}
+    .contact-item:hover{background:rgba(255,255,255,.08);}
+    .contact-item.active{background:rgba(201,162,39,.15);border-color:rgba(201,162,39,.3);}
+    .contact-name{color:var(--white);font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .contact-address{color:rgba(255,255,255,.45);font-size:11px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .contact-avatar{width:32px;height:32px;border-radius:50%;background:var(--navy3);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--gold);flex-shrink:0;}
+    .ci-row{display:flex;align-items:center;gap:10px;}
+    .ci-info{min-width:0;flex:1;}
+    .empty-state{text-align:center;color:rgba(255,255,255,.35);font-size:13px;padding:32px 16px;}
+
+    /* MAIN */
+    .main{flex:1;overflow-y:auto;padding:24px;}
+    .main::-webkit-scrollbar{width:6px;}
+    .main::-webkit-scrollbar-thumb{background:var(--gray200);border-radius:3px;}
+
+    /* PLACEHOLDER */
+    .placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--gray400);text-align:center;gap:12px;}
+    .placeholder-icon{font-size:48px;opacity:.4;}
+    .placeholder h3{font-size:17px;color:var(--gray600);}
+    .placeholder p{font-size:13px;max-width:280px;line-height:1.5;}
+
+    /* CARDS */
+    .card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:16px;overflow:hidden;}
+    .card-header{padding:16px 20px;border-bottom:1px solid var(--gray200);display:flex;align-items:center;justify-content:space-between;}
+    .card-title{font-size:14px;font-weight:700;color:var(--navy);display:flex;align-items:center;gap:8px;}
+    .card-title .dot{width:8px;height:8px;border-radius:50%;background:var(--gold);}
+    .card-body{padding:20px;}
+
+    /* FORM */
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 16px;}
+    .form-grid.cols-3{grid-template-columns:1fr 1fr 1fr;}
+    .form-grid.cols-1{grid-template-columns:1fr;}
+    .form-group{display:flex;flex-direction:column;gap:5px;}
+    .form-group.span-2{grid-column:span 2;}
+    .form-group.span-3{grid-column:span 3;}
+    label{font-size:11px;font-weight:600;color:var(--gray600);text-transform:uppercase;letter-spacing:.5px;}
+    input[type=text],input[type=email],input[type=tel],input[type=date],textarea,select{
+      border:1px solid var(--gray200);border-radius:6px;padding:8px 10px;font-size:13px;color:var(--gray800);
+      background:var(--white);outline:none;transition:border .15s,box-shadow .15s;width:100%;
+    }
+    input:focus,textarea:focus{border-color:var(--navy3);box-shadow:0 0 0 3px rgba(37,77,122,.1);}
+    textarea{resize:vertical;min-height:80px;font-family:inherit;}
+
+    /* CONTINGENCY ROWS */
+    .contingency-row{display:grid;grid-template-columns:160px 1fr auto;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--gray100);}
+    .contingency-row:last-child{border-bottom:none;}
+    .cng-label{font-size:13px;font-weight:600;color:var(--gray800);}
+    .cng-badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;}
+    .cng-badge.active{background:#dbeafe;color:#1d4ed8;}
+    .cng-badge.removed{background:#dcfce7;color:#166534;}
+    .toggle-wrap{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--gray600);}
+    .toggle{position:relative;display:inline-block;width:40px;height:22px;}
+    .toggle input{opacity:0;width:0;height:0;}
+    .slider{position:absolute;inset:0;background:var(--gray200);border-radius:22px;cursor:pointer;transition:.2s;}
+    .slider:before{content:'';position:absolute;height:16px;width:16px;left:3px;bottom:3px;background:var(--white);border-radius:50%;transition:.2s;}
+    input:checked + .slider{background:var(--green);}
+    input:checked + .slider:before{transform:translateX(18px);}
+
+    /* BUTTONS */
+    .btn{border:none;border-radius:var(--radius);padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:background .15s,opacity .15s;}
+    .btn:disabled{opacity:.55;cursor:not-allowed;}
+    .btn-primary{background:var(--navy);color:var(--white);}
+    .btn-primary:not(:disabled):hover{background:var(--navy3);}
+    .btn-gold{background:var(--gold);color:var(--navy);}
+    .btn-gold:not(:disabled):hover{background:var(--gold2);}
+    .btn-danger{background:var(--red2);color:var(--red);}
+    .btn-danger:not(:disabled):hover{background:#fecaca;}
+    .btn-outline{background:transparent;border:1px solid var(--gray200);color:var(--gray600);}
+    .btn-outline:not(:disabled):hover{background:var(--gray50);}
+    .btn-sm{padding:6px 12px;font-size:12px;}
+    .card-footer{padding:12px 20px;background:var(--gray50);border-top:1px solid var(--gray200);display:flex;align-items:center;justify-content:space-between;gap:8px;}
+
+    /* SHARE LINK */
+    .share-row{display:flex;align-items:center;gap:8px;}
+    .share-url{flex:1;background:var(--gray50);border:1px solid var(--gray200);border-radius:6px;padding:9px 12px;font-size:12px;color:var(--gray600);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:monospace;}
+
+    /* TOAST */
+    #toast{position:fixed;bottom:24px;right:24px;background:var(--gray800);color:var(--white);padding:10px 18px;border-radius:var(--radius);font-size:13px;font-weight:500;opacity:0;transform:translateY(8px);transition:opacity .2s,transform .2s;pointer-events:none;z-index:100;}
+    #toast.show{opacity:1;transform:translateY(0);}
+    #toast.error{background:var(--red);}
+    #toast.success{background:var(--green);}
+
+    /* SECTION LABEL */
+    .section-label{font-size:11px;font-weight:700;color:var(--gray400);text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px;margin-top:4px;}
+
+    @media(max-width:900px){
+      .sidebar{width:240px;}
+      .form-grid.cols-3{grid-template-columns:1fr 1fr;}
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">
+    <div class="nav-logo">SW</div>
+    <div>
+      <div class="nav-title">Agent Dashboard</div>
+      <div class="nav-sub">Sean Walsh · Compass Realty</div>
+    </div>
+  </div>
+  <div class="nav-badge">Oakland Real Estate</div>
+</nav>
+
+<div class="layout">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <button class="btn-new" onclick="showNewContactForm()">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        New Client
+      </button>
+    </div>
+    <div class="search-wrap">
+      <input type="text" id="searchInput" placeholder="Search clients…" oninput="filterContacts()">
+    </div>
+    <div class="contacts-list" id="contactsList">
+      <div class="empty-state">No clients yet.<br>Click "New Client" to get started.</div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main" id="mainArea">
+    <div class="placeholder">
+      <div class="placeholder-icon">🏠</div>
+      <h3>Select a client or create a new one</h3>
+      <p>Add your buyer's contact info and upload their contract details to generate a personalized chat link.</p>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const API = '';
+let contacts = [];
+let activeId = null;
+
+// ─── INIT ────────────────────────────────────────────────
+async function init() {
+  await loadContacts();
+}
+
+async function loadContacts() {
+  try {
+    const res = await fetch(`${API}/api/contacts`);
+    contacts = await res.json();
+    renderContactsList();
+  } catch(e) {
+    toast('Failed to load contacts', 'error');
+  }
+}
+
+function renderContactsList() {
+  const el = document.getElementById('contactsList');
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const filtered = contacts.filter(c =>
+    c.name.toLowerCase().includes(q) ||
+    (c.property_address || '').toLowerCase().includes(q)
+  );
+
+  if (!filtered.length) {
+    el.innerHTML = `<div class="empty-state">${q ? 'No results found.' : 'No clients yet.<br>Click "New Client" to get started.'}</div>`;
+    return;
+  }
+
+  el.innerHTML = filtered.map(c => `
+    <div class="contact-item ${c.id === activeId ? 'active' : ''}" onclick="selectContact('${c.id}')">
+      <div class="ci-row">
+        <div class="contact-avatar">${initials(c.name)}</div>
+        <div class="ci-info">
+          <div class="contact-name">${esc(c.name)}</div>
+          <div class="contact-address">${esc(c.property_address || 'No property yet')}</div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function filterContacts() { renderContactsList(); }
+
+// ─── SELECT / LOAD CONTACT ────────────────────────────────
+async function selectContact(id) {
+  activeId = id;
+  renderContactsList();
+  try {
+    const res = await fetch(`${API}/api/contacts/${id}`);
+    const data = await res.json();
+    renderMainPanel(data, data.contract);
+  } catch(e) {
+    toast('Failed to load contact', 'error');
+  }
+}
+
+function showNewContactForm() {
+  activeId = null;
+  renderContactsList();
+  renderMainPanel(null, null);
+}
+
+// ─── MAIN PANEL ───────────────────────────────────────────
+function renderMainPanel(contact, contract) {
+  const isNew = !contact;
+  const c = contact || {};
+  const ct = contract || {};
+
+  document.getElementById('mainArea').innerHTML = `
+    <!-- CONTACT INFO CARD -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title"><span class="dot"></span>${isNew ? 'New Client' : 'Contact Info'}</div>
+        ${!isNew ? `<button class="btn btn-danger btn-sm" onclick="deleteContact('${c.id}')">Delete Client</button>` : ''}
+      </div>
+      <div class="card-body">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Full Name *</label>
+            <input type="text" id="f_name" value="${esc(c.name||'')}" placeholder="e.g. John Smith">
+          </div>
+          <div class="form-group">
+            <label>Phone</label>
+            <input type="tel" id="f_phone" value="${esc(c.phone||'')}" placeholder="(510) 555-0100">
+          </div>
+          <div class="form-group span-2">
+            <label>Email</label>
+            <input type="email" id="f_email" value="${esc(c.email||'')}" placeholder="john@example.com">
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span style="font-size:12px;color:var(--gray400)">${!isNew ? 'Last updated ' + formatDate(c.updated_at) : 'Fill in details and save'}</span>
+        <button class="btn btn-primary" onclick="${isNew ? 'createContact()' : `updateContact('${c.id}')`}">
+          ${isNew ? 'Create Client' : 'Save Contact'}
+        </button>
+      </div>
+    </div>
+
+    ${!isNew ? `
+    <!-- CONTRACT DETAILS CARD -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title"><span class="dot"></span>Contract Details</div>
+      </div>
+      <div class="card-body">
+
+        <div class="section-label">Property</div>
+        <div class="form-grid cols-1" style="margin-bottom:20px">
+          <div class="form-group">
+            <label>Property Address</label>
+            <input type="text" id="ct_property_address" value="${esc(ct.property_address||'')}" placeholder="123 Oak St, Oakland, CA 94601">
+          </div>
+        </div>
+
+        <div class="section-label">Key Dates</div>
+        <div class="form-grid cols-3" style="margin-bottom:20px">
+          <div class="form-group">
+            <label>Offer Date</label>
+            <input type="date" id="ct_offer_date" value="${ct.offer_date||''}">
+          </div>
+          <div class="form-group">
+            <label>Acceptance Date</label>
+            <input type="date" id="ct_acceptance_date" value="${ct.acceptance_date||''}">
+          </div>
+          <div class="form-group">
+            <label>Close of Escrow</label>
+            <input type="date" id="ct_close_of_escrow_date" value="${ct.close_of_escrow_date||''}">
+          </div>
+        </div>
+
+        <div class="section-label">Contingencies</div>
+        <div style="margin-bottom:20px">
+          ${renderContingencyRow('Loan', 'loan', ct)}
+          ${renderContingencyRow('Appraisal', 'appraisal', ct)}
+          ${renderContingencyRow('Investigation', 'investigation', ct)}
+          ${renderContingencyRow('Insurance', 'insurance', ct)}
+        </div>
+
+        <div class="section-label">Financial Details</div>
+        <div class="form-grid cols-3" style="margin-bottom:20px">
+          <div class="form-group">
+            <label>Purchase Price</label>
+            <input type="text" id="ct_purchase_price" value="${esc(ct.purchase_price||'')}" placeholder="$750,000">
+          </div>
+          <div class="form-group">
+            <label>Earnest Money Deposit</label>
+            <input type="text" id="ct_earnest_money_deposit" value="${esc(ct.earnest_money_deposit||'')}" placeholder="$15,000">
+          </div>
+          <div class="form-group">
+            <label>Down Payment</label>
+            <input type="text" id="ct_down_payment" value="${esc(ct.down_payment||'')}" placeholder="$150,000">
+          </div>
+          <div class="form-group">
+            <label>Loan Amount</label>
+            <input type="text" id="ct_loan_amount" value="${esc(ct.loan_amount||'')}" placeholder="$600,000">
+          </div>
+          <div class="form-group">
+            <label>Lender</label>
+            <input type="text" id="ct_lender_name" value="${esc(ct.lender_name||'')}" placeholder="ABC Mortgage">
+          </div>
+        </div>
+
+        <div class="section-label">Escrow</div>
+        <div class="form-grid" style="margin-bottom:20px">
+          <div class="form-group">
+            <label>Escrow Company</label>
+            <input type="text" id="ct_escrow_company" value="${esc(ct.escrow_company||'')}" placeholder="XYZ Escrow">
+          </div>
+          <div class="form-group">
+            <label>Escrow Officer</label>
+            <input type="text" id="ct_escrow_officer" value="${esc(ct.escrow_officer||'')}" placeholder="Jane Smith">
+          </div>
+        </div>
+
+        <div class="section-label">Agent Notes</div>
+        <div class="form-grid cols-1">
+          <div class="form-group">
+            <label>Additional Notes (visible to AI, not shown directly to client)</label>
+            <textarea id="ct_additional_notes" placeholder="Any special conditions, client concerns, or deal notes…">${esc(ct.additional_notes||'')}</textarea>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span style="font-size:12px;color:var(--gray400)">${ct.updated_at ? 'Contract last saved ' + formatDate(ct.updated_at) : 'No contract saved yet'}</span>
+        <button class="btn btn-primary" onclick="saveContract('${c.id}')">Save Contract</button>
+      </div>
+    </div>
+
+    <!-- SHARE LINK CARD -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title"><span class="dot" style="background:var(--green)"></span>Client Share Link</div>
+      </div>
+      <div class="card-body">
+        <p style="font-size:13px;color:var(--gray600);margin-bottom:14px;line-height:1.6">
+          Share this unique link with <strong>${esc(c.name)}</strong>. They'll be able to chat with the AI assistant about their specific transaction details.
+        </p>
+        <div class="share-row">
+          <div class="share-url" id="shareUrl">${window.location.origin}/client/${c.share_token}</div>
+          <button class="btn btn-gold btn-sm" onclick="copyLink('${c.share_token}')">Copy Link</button>
+          <a href="/client/${c.share_token}" target="_blank" class="btn btn-outline btn-sm" style="text-decoration:none">Preview</a>
+        </div>
+      </div>
+    </div>
+    ` : ''}
+  `;
+}
+
+function renderContingencyRow(label, key, ct) {
+  const dateVal = ct[`${key}_contingency_date`] || '';
+  const removed = ct[`${key}_contingency_removed`] ? true : false;
+  return `
+    <div class="contingency-row">
+      <div class="cng-label">${label}</div>
+      <div>
+        <input type="date" id="ct_${key}_contingency_date" value="${dateVal}" style="max-width:180px">
+      </div>
+      <div class="toggle-wrap">
+        <span class="cng-badge ${removed ? 'removed' : 'active'}" id="badge_${key}">${removed ? 'Removed' : 'Active'}</span>
+        <label class="toggle" title="Toggle removed">
+          <input type="checkbox" id="ct_${key}_contingency_removed" ${removed ? 'checked' : ''}
+            onchange="updateBadge('${key}', this.checked)">
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>`;
+}
+
+function updateBadge(key, removed) {
+  const b = document.getElementById(`badge_${key}`);
+  b.textContent = removed ? 'Removed' : 'Active';
+  b.className = `cng-badge ${removed ? 'removed' : 'active'}`;
+}
+
+// ─── CONTACT CRUD ─────────────────────────────────────────
+async function createContact() {
+  const name = val('f_name');
+  if (!name) return toast('Name is required', 'error');
+  try {
+    const res = await fetch(`${API}/api/contacts`, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ name, email: val('f_email'), phone: val('f_phone') })
+    });
+    const data = await res.json();
+    if (!res.ok) return toast(data.error || 'Error creating contact', 'error');
+    await loadContacts();
+    await selectContact(data.id);
+    toast('Client created!', 'success');
+  } catch(e) {
+    toast('Error creating contact', 'error');
+  }
+}
+
+async function updateContact(id) {
+  const name = val('f_name');
+  if (!name) return toast('Name is required', 'error');
+  try {
+    const res = await fetch(`${API}/api/contacts/${id}`, {
+      method:'PUT', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ name, email: val('f_email'), phone: val('f_phone') })
+    });
+    const data = await res.json();
+    if (!res.ok) return toast(data.error || 'Error updating contact', 'error');
+    await loadContacts();
+    renderContactsList();
+    toast('Contact saved!', 'success');
+  } catch(e) {
+    toast('Error saving contact', 'error');
+  }
+}
+
+async function deleteContact(id) {
+  if (!confirm('Delete this client and all their contract data? This cannot be undone.')) return;
+  try {
+    const res = await fetch(`${API}/api/contacts/${id}`, { method:'DELETE' });
+    if (!res.ok) return toast('Error deleting contact', 'error');
+    activeId = null;
+    await loadContacts();
+    document.getElementById('mainArea').innerHTML = `
+      <div class="placeholder">
+        <div class="placeholder-icon">🏠</div>
+        <h3>Select a client or create a new one</h3>
+        <p>Add your buyer's contact info and upload their contract details to generate a personalized chat link.</p>
+      </div>`;
+    toast('Client deleted', 'success');
+  } catch(e) {
+    toast('Error deleting contact', 'error');
+  }
+}
+
+// ─── CONTRACT SAVE ────────────────────────────────────────
+async function saveContract(contactId) {
+  const payload = {
+    property_address: val('ct_property_address'),
+    offer_date: val('ct_offer_date'),
+    acceptance_date: val('ct_acceptance_date'),
+    close_of_escrow_date: val('ct_close_of_escrow_date'),
+    loan_contingency_date: val('ct_loan_contingency_date'),
+    appraisal_contingency_date: val('ct_appraisal_contingency_date'),
+    investigation_contingency_date: val('ct_investigation_contingency_date'),
+    insurance_contingency_date: val('ct_insurance_contingency_date'),
+    loan_contingency_removed: chk('ct_loan_contingency_removed'),
+    appraisal_contingency_removed: chk('ct_appraisal_contingency_removed'),
+    investigation_contingency_removed: chk('ct_investigation_contingency_removed'),
+    insurance_contingency_removed: chk('ct_insurance_contingency_removed'),
+    purchase_price: val('ct_purchase_price'),
+    earnest_money_deposit: val('ct_earnest_money_deposit'),
+    down_payment: val('ct_down_payment'),
+    loan_amount: val('ct_loan_amount'),
+    lender_name: val('ct_lender_name'),
+    escrow_company: val('ct_escrow_company'),
+    escrow_officer: val('ct_escrow_officer'),
+    additional_notes: val('ct_additional_notes'),
+  };
+  try {
+    const res = await fetch(`${API}/api/contacts/${contactId}/contract`, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (!res.ok) return toast(data.error || 'Error saving contract', 'error');
+    await loadContacts();
+    toast('Contract saved!', 'success');
+  } catch(e) {
+    toast('Error saving contract', 'error');
+  }
+}
+
+// ─── SHARE LINK ───────────────────────────────────────────
+async function copyLink(token) {
+  const url = `${window.location.origin}/client/${token}`;
+  try {
+    await navigator.clipboard.writeText(url);
+    toast('Link copied to clipboard!', 'success');
+  } catch(e) {
+    toast('Copy failed — select and copy manually', 'error');
+  }
+}
+
+// ─── UTILITIES ────────────────────────────────────────────
+function val(id) {
+  const el = document.getElementById(id);
+  return el ? el.value.trim() : '';
+}
+function chk(id) {
+  const el = document.getElementById(id);
+  return el ? el.checked : false;
+}
+function esc(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function initials(name) {
+  return name.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
+}
+function formatDate(iso) {
+  if (!iso) return '';
+  return new Date(iso).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+}
+
+let toastTimer;
+function toast(msg, type='') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = `show ${type}`;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { el.className = ''; }, 2800);
+}
+
+init();
+</script>
+</body>
+</html>

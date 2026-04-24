@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Home Buyer Assistant</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    :root{
+      --navy:#0f2240;--navy2:#1a3a5c;--navy3:#254d7a;
+      --gold:#c9a227;--gold2:#f0c93a;
+      --white:#fff;--gray50:#f9fafb;--gray100:#f3f4f6;
+      --gray200:#e5e7eb;--gray400:#9ca3af;--gray600:#4b5563;--gray800:#1f2937;
+      --user-bg:#0f2240;--ai-bg:#fff;
+      --radius:12px;
+    }
+    html,body{height:100%;overflow:hidden;}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--gray100);display:flex;flex-direction:column;}
+
+    /* HEADER */
+    header{background:var(--navy);color:var(--white);flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,.25);}
+    .header-inner{max-width:800px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+    .agent-info{display:flex;align-items:center;gap:12px;}
+    .agent-avatar{width:44px;height:44px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;color:var(--navy);flex-shrink:0;}
+    .agent-name{font-size:15px;font-weight:700;line-height:1.2;}
+    .agent-title{font-size:12px;color:rgba(255,255,255,.55);margin-top:2px;}
+    .client-info{text-align:right;}
+    .client-name{font-size:14px;font-weight:600;color:var(--white);}
+    .client-addr{font-size:11px;color:rgba(255,255,255,.5);margin-top:2px;max-width:220px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .disclaimer-bar{background:rgba(201,162,39,.12);border-top:1px solid rgba(201,162,39,.2);padding:7px 20px;text-align:center;font-size:11px;color:rgba(255,255,255,.5);}
+
+    /* CHAT AREA */
+    .chat-wrap{flex:1;overflow:hidden;display:flex;flex-direction:column;max-width:800px;width:100%;margin:0 auto;padding:0 16px;}
+    .messages{flex:1;overflow-y:auto;padding:20px 0;display:flex;flex-direction:column;gap:14px;}
+    .messages::-webkit-scrollbar{width:4px;}
+    .messages::-webkit-scrollbar-thumb{background:var(--gray200);border-radius:2px;}
+
+    /* BUBBLES */
+    .msg{display:flex;gap:10px;max-width:78%;animation:fadeUp .2s ease;}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+    .msg.user{align-self:flex-end;flex-direction:row-reverse;}
+    .msg.ai{align-self:flex-start;}
+    .bubble{padding:12px 16px;border-radius:18px;font-size:14px;line-height:1.65;white-space:pre-wrap;word-break:break-word;}
+    .msg.user .bubble{background:var(--user-bg);color:var(--white);border-bottom-right-radius:4px;}
+    .msg.ai .bubble{background:var(--ai-bg);color:var(--gray800);border-bottom-left-radius:4px;box-shadow:0 1px 3px rgba(0,0,0,.1);}
+    .msg-avatar{width:32px;height:32px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;margin-top:2px;}
+    .msg.ai .msg-avatar{background:var(--gold);color:var(--navy);}
+    .msg.user .msg-avatar{background:var(--navy2);color:var(--white);}
+
+    /* TYPING */
+    .typing-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--gray400);margin:0 2px;animation:blink 1.2s infinite;}
+    .typing-dot:nth-child(2){animation-delay:.2s;}
+    .typing-dot:nth-child(3){animation-delay:.4s;}
+    @keyframes blink{0%,60%,100%{opacity:.2}30%{opacity:1}}
+
+    /* INPUT */
+    .input-area{flex-shrink:0;padding:12px 0 20px;}
+    .input-row{display:flex;gap:10px;align-items:flex-end;background:var(--white);border:1.5px solid var(--gray200);border-radius:14px;padding:10px 10px 10px 16px;box-shadow:0 2px 8px rgba(0,0,0,.07);transition:border .15s;}
+    .input-row:focus-within{border-color:var(--navy3);}
+    #msgInput{flex:1;border:none;outline:none;font-size:14px;color:var(--gray800);resize:none;max-height:140px;line-height:1.5;font-family:inherit;background:transparent;}
+    #msgInput::placeholder{color:var(--gray400);}
+    #sendBtn{width:40px;height:40px;border-radius:10px;background:var(--navy);color:var(--white);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s;align-self:flex-end;}
+    #sendBtn:hover:not(:disabled){background:var(--navy3);}
+    #sendBtn:disabled{opacity:.45;cursor:not-allowed;}
+    .powered{text-align:center;font-size:11px;color:var(--gray400);padding-bottom:4px;}
+
+    /* ERROR / LOADING */
+    #loadingState{text-align:center;padding:60px 20px;color:var(--gray400);}
+    #errorState{text-align:center;padding:60px 20px;}
+    .error-icon{font-size:36px;margin-bottom:12px;}
+    .error-msg{color:var(--gray600);font-size:14px;}
+    .suggestions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+    .suggestion{background:var(--white);border:1px solid var(--gray200);border-radius:20px;padding:7px 14px;font-size:12px;color:var(--navy2);cursor:pointer;transition:background .12s,border .12s;}
+    .suggestion:hover{background:var(--gray50);border-color:var(--navy3);}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="agent-info">
+      <div class="agent-avatar">SW</div>
+      <div>
+        <div class="agent-name">Sean Walsh</div>
+        <div class="agent-title">Compass Realty · Oakland, CA</div>
+      </div>
+    </div>
+    <div class="client-info" id="clientInfo" style="display:none">
+      <div class="client-name" id="clientName"></div>
+      <div class="client-addr" id="clientAddr"></div>
+    </div>
+  </div>
+  <div class="disclaimer-bar">For informational use only — not legal or financial advice. Always consult a qualified professional.</div>
+</header>
+
+<div class="chat-wrap">
+
+  <!-- Loading / Error states (replaced once ready) -->
+  <div id="loadingState">
+    <span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>
+  </div>
+  <div id="errorState" style="display:none">
+    <div class="error-icon">🏚️</div>
+    <p class="error-msg">This link doesn't seem to be valid, or has been removed.</p>
+    <p class="error-msg" style="margin-top:8px;font-size:12px">Contact Sean Walsh directly: <a href="tel:5103387144" style="color:var(--navy2)">510-338-7144</a></p>
+  </div>
+
+  <div class="messages" id="messages" style="display:none"></div>
+
+  <div class="input-area" id="inputArea" style="display:none">
+    <div class="suggestions" id="suggestions"></div>
+    <div class="input-row">
+      <textarea id="msgInput" placeholder="Ask a question about your transaction…" rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+      <button id="sendBtn" onclick="sendMessage()" title="Send">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+    <div class="powered">Powered by Sean Walsh AI Assistant</div>
+  </div>
+</div>
+
+<script>
+const token = location.pathname.split('/client/')[1]?.replace(/\//g,'');
+let shareToken = token;
+let history = [];
+let clientName = '';
+let isStreaming = false;
+
+const SUGGESTIONS = [
+  'When is my close of escrow?',
+  'What contingencies are still active?',
+  'What is my earnest money deposit?',
+  'When do I need to remove my loan contingency?',
+  'Who is my escrow officer?',
+  'What is the purchase price?',
+];
+
+async function init() {
+  if (!token) return showError();
+
+  try {
+    const res = await fetch(`/api/contacts/share/${token}`);
+    if (!res.ok) return showError();
+    const { contact, contract } = await res.json();
+
+    clientName = contact.name;
+    document.getElementById('clientName').textContent = contact.name;
+    document.getElementById('clientAddr').textContent =
+      (contract && contract.property_address) ? contract.property_address : '';
+    document.getElementById('clientInfo').style.display = 'block';
+    document.title = `${contact.name} | Home Buyer Assistant`;
+
+    document.getElementById('loadingState').style.display = 'none';
+    document.getElementById('messages').style.display = 'flex';
+    document.getElementById('inputArea').style.display = 'block';
+
+    renderSuggestions();
+    await sendInitial();
+  } catch(e) {
+    showError();
+  }
+}
+
+function showError() {
+  document.getElementById('loadingState').style.display = 'none';
+  document.getElementById('errorState').style.display = 'block';
+}
+
+function renderSuggestions() {
+  const el = document.getElementById('suggestions');
+  el.innerHTML = SUGGESTIONS.map(s =>
+    `<div class="suggestion" onclick="sendSuggestion('${s.replace(/'/g,"\\'")}'">${s}</div>`
+  ).join('');
+}
+
+async function sendInitial() {
+  await doChat(null, true);
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 140) + 'px';
+}
+
+async function sendSuggestion(text) {
+  document.getElementById('suggestions').innerHTML = '';
+  document.getElementById('msgInput').value = text;
+  await sendMessage();
+}
+
+async function sendMessage() {
+  if (isStreaming) return;
+  const input = document.getElementById('msgInput');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  input.style.height = 'auto';
+  document.getElementById('suggestions').innerHTML = '';
+  appendMessage('user', text);
+  await doChat(text, false);
+}
+
+async function doChat(message, isInitial) {
+  isStreaming = true;
+  document.getElementById('sendBtn').disabled = true;
+
+  const typingId = 'typing_' + Date.now();
+  appendTyping(typingId);
+
+  try {
+    const res = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message, history, isInitial, shareToken })
+    });
+
+    removeTyping(typingId);
+    const aiMsgId = 'ai_' + Date.now();
+    appendMessage('ai', '', aiMsgId);
+
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let aiText = '';
+    let buffer = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop();
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        const payload = line.slice(6);
+        if (payload === '[DONE]') break;
+        try {
+          const { content } = JSON.parse(payload);
+          if (content) {
+            aiText += content;
+            updateMessage(aiMsgId, aiText);
+          }
+        } catch {}
+      }
+    }
+
+    if (aiText) {
+      if (!isInitial) history.push({ role: 'user', content: message });
+      history.push({ role: 'assistant', content: aiText });
+    }
+  } catch(e) {
+    removeTyping(typingId);
+    appendMessage('ai', 'Sorry, something went wrong. Please try again.');
+  }
+
+  isStreaming = false;
+  document.getElementById('sendBtn').disabled = false;
+  document.getElementById('msgInput').focus();
+}
+
+function appendMessage(role, text, id) {
+  const msgs = document.getElementById('messages');
+  const isAI = role === 'ai';
+  const div = document.createElement('div');
+  div.className = `msg ${role}`;
+  if (id) div.id = id;
+  div.innerHTML = `
+    <div class="msg-avatar">${isAI ? 'SW' : clientName.charAt(0).toUpperCase()}</div>
+    <div class="bubble">${formatText(text)}</div>
+  `;
+  msgs.appendChild(div);
+  scrollBottom();
+  return div;
+}
+
+function updateMessage(id, text) {
+  const el = document.getElementById(id);
+  if (el) {
+    el.querySelector('.bubble').innerHTML = formatText(text);
+    scrollBottom();
+  }
+}
+
+function appendTyping(id) {
+  const msgs = document.getElementById('messages');
+  const div = document.createElement('div');
+  div.className = 'msg ai';
+  div.id = id;
+  div.innerHTML = `
+    <div class="msg-avatar">SW</div>
+    <div class="bubble"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></div>
+  `;
+  msgs.appendChild(div);
+  scrollBottom();
+}
+
+function removeTyping(id) {
+  const el = document.getElementById(id);
+  if (el) el.remove();
+}
+
+function scrollBottom() {
+  const msgs = document.getElementById('messages');
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function formatText(text) {
+  return text
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g,'<em>$1</em>')
+    .replace(/\n/g,'<br>');
+}
+
+init();
+</script>
+</body>
+</html>
