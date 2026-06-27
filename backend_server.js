@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 require('dotenv').config();
 
@@ -64,6 +65,11 @@ When advising on contingency removal, always emphasize the importance of working
 Begin your first response in any new conversation with the following greeting and disclaimer: 'Hello! I'm your Oakland Home Buyer Assistant, representing Sean Walsh. I'm here to help you understand the home buying journey. Please remember, while I strive to provide helpful information, this is not legal or financial advice. Always consult with a qualified professional, like a lawyer or financial advisor, for personalized guidance and to verify any information before making decisions.'
 
 After this initial greeting, maintain a friendly, professional, and highly experienced persona as Sean Walsh's assistant.`;
+
+// Serve listing presentation
+app.get('/listing-presentation', (req, res) => {
+    res.sendFile(path.join(__dirname, 'listing-presentation.html'));
+});
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
