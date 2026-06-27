@@ -6,7 +6,7 @@ const path = require('path');
 const TOTAL_SLIDES = 10;
 const OUT_DIR = path.join(__dirname, 'deck-output');
 const PPTX_PATH = path.join(__dirname, 'Sean-Walsh-Listing-Presentation.pptx');
-const HTML_FILE = `file://${path.join(__dirname, 'listing-presentation.html')}`;
+const HTML_FILE = `file://${path.join(__dirname, 'listing-presentation-print.html')}`;
 
 async function captureSlides() {
   if (!fs.existsSync(OUT_DIR)) fs.mkdirSync(OUT_DIR);
@@ -19,43 +19,37 @@ async function captureSlides() {
   const paths = [];
 
   for (let i = 0; i < TOTAL_SLIDES; i++) {
-    // Fresh page per slide — eliminates all transition / state bleed between captures
+    // Fresh page per slide — eliminates all state bleed
     const page = await browser.newPage();
     await page.setViewportSize({ width: 1920, height: 1080 });
 
     await page.goto(HTML_FILE, { waitUntil: 'load' });
 
-    // Kill every transition and animation so slides are instantly visible
-    await page.addStyleTag({
-      content: '*, *::before, *::after { transition: none !important; animation: none !important; }',
-    });
-
-    // Activate exactly this slide, force opacity via inline style, hide chrome
+    // Activate this slide, hide others
     await page.evaluate((idx) => {
-      document.querySelectorAll('.slide').forEach((s, j) => {
+      const slides = document.querySelectorAll('.slide');
+      slides.forEach((s, j) => {
         if (j === idx) {
           s.classList.add('active');
-          s.style.opacity = '1';
-          s.style.pointerEvents = 'all';
         } else {
           s.classList.remove('active');
-          s.style.opacity = '0';
-          s.style.pointerEvents = 'none';
+          s.style.display = 'none';
         }
       });
-      const nav = document.getElementById('nav');
-      if (nav) nav.style.display = 'none';
-      const hint = document.querySelector('.key-hint');
-      if (hint) hint.style.display = 'none';
     }, i);
 
-    // Let the browser paint and Google Fonts settle
-    await page.waitForTimeout(1200);
+    // Wait for fonts + paint
+    await page.waitForLoadState('networkidle');
+    await page.waitForTimeout(1500);
 
+    // Screenshot the slide element directly (not the viewport) for exact 1920x1080
+    const slideHandle = await page.$(`#s${i + 1}`);
     const imgPath = path.join(OUT_DIR, `slide-${String(i + 1).padStart(2, '0')}.png`);
-    await page.screenshot({ path: imgPath, type: 'png' });
+    await slideHandle.screenshot({ path: imgPath, type: 'png' });
     paths.push(imgPath);
-    console.log(`  Captured slide ${i + 1} / ${TOTAL_SLIDES}`);
+
+    const stat = fs.statSync(imgPath);
+    console.log(`  Slide ${i + 1}: ${imgPath} (${Math.round(stat.size / 1024)} KB)`);
 
     await page.close();
   }
@@ -68,9 +62,9 @@ async function buildPptx(imagePaths) {
   const pptx = new PptxGenJS();
 
   pptx.layout = 'LAYOUT_WIDE'; // 13.33" × 7.5" (16:9)
-  pptx.title   = 'Sean Walsh | Cush Real Estate | Listing Presentation';
+  pptx.title = 'Sean Walsh | Cush Real Estate | Listing Presentation';
   pptx.subject = "Maximizing Your Home's Value Through Strategic Design";
-  pptx.author  = 'Sean Walsh, Cush Real Estate By Design';
+  pptx.author = 'Sean Walsh, Cush Real Estate By Design';
 
   for (const imgPath of imagePaths) {
     const slide = pptx.addSlide();
@@ -82,15 +76,11 @@ async function buildPptx(imagePaths) {
 }
 
 (async () => {
-  console.log('\nCapturing slides...');
+  console.log('\nCapturing slides at 1920×1080...');
   const paths = await captureSlides();
 
   console.log('\nBuilding PPTX...');
   await buildPptx(paths);
-
-  // Clean up screenshots
-  paths.forEach(p => fs.unlinkSync(p));
-  fs.rmdirSync(OUT_DIR);
 
   console.log('Done.\n');
 })();

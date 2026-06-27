@@ -1,0 +1,1814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sean Walsh | Listing Presentation</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold: #C9A84C;
+      --gold-bright: #E8C96A;
+      --gold-deep: #A88A30;
+      --dark: #0A0A08;
+      --charcoal: #14130F;
+      --warm-brown: #2A2218;
+      --mid-gray: #4A4845;
+      --light-gray: #B8B0A0;
+      --cream: #F5EDDC;
+      --white: #FFFFFF;
+      --sage: #7A8C72;
+      --rust: #B8623A;
+      --slate: #2E3A4A;
+      --moss: #4A5A3A;
+    }
+
+    html, body {
+      margin: 0; padding: 0;
+      background: #000;
+      font-family: 'Inter', sans-serif;
+      color: var(--white);
+    }
+
+    /* Each slide is exactly 1920x1080 — designed for screenshot at viewport 1920x1080 */
+    .slide {
+      width: 1920px;
+      height: 1080px;
+      position: relative;
+      overflow: hidden;
+      display: none;
+    }
+
+    .slide.active { display: block; }
+
+    /* ───────── SHARED ───────── */
+    .serif { font-family: 'Playfair Display', Georgia, serif; }
+
+    .eyebrow {
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 500;
+    }
+
+    .gold-bar {
+      height: 3px;
+      width: 80px;
+      background: var(--gold);
+    }
+
+    /* ════════════════════════════════════════════════
+       SLIDE 1 — TITLE (full-bleed cinematic)
+    ════════════════════════════════════════════════ */
+    #s1 {
+      background: #0a0805;
+    }
+
+    .s1-canvas {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 80% at 70% 35%, rgba(220,150,60,0.35) 0%, transparent 65%),
+        radial-gradient(ellipse 80% 100% at 100% 0%, rgba(180,120,40,0.4) 0%, transparent 50%),
+        linear-gradient(135deg, #0a0805 0%, #1a1208 25%, #2a1d0c 50%, #1c1610 75%, #0a0805 100%);
+    }
+
+    .s1-floor {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 280px;
+      background:
+        linear-gradient(180deg, transparent 0%, rgba(90,55,20,0.35) 50%, rgba(60,35,10,0.6) 100%);
+    }
+
+    /* The bay view */
+    .s1-view {
+      position: absolute;
+      top: 100px; right: 130px;
+      width: 720px; height: 600px;
+      background:
+        linear-gradient(180deg,
+          #1a2a40 0%,
+          #2a4060 15%,
+          #4070a0 35%,
+          #c89540 55%,
+          #d47820 70%,
+          #8a3a10 85%,
+          #2a1a08 100%);
+      border-radius: 4px;
+      box-shadow:
+        inset 0 0 80px rgba(0,0,0,0.4),
+        0 30px 80px rgba(200,140,40,0.25);
+    }
+
+    .s1-view::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(0,0,0,0.5) 0%, transparent 25%, transparent 75%, rgba(0,0,0,0.3) 100%);
+    }
+
+    /* horizon line + reflection */
+    .s1-view::after {
+      content: '';
+      position: absolute;
+      top: 58%; left: 5%;
+      width: 90%; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,200,100,0.6), transparent);
+    }
+
+    .s1-cush {
+      position: absolute;
+      top: 80px; right: 130px;
+      text-align: right;
+      z-index: 10;
+    }
+
+    .s1-cush-logo {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 56px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      color: var(--gold);
+      line-height: 1;
+      text-shadow: 0 4px 30px rgba(0,0,0,0.8);
+    }
+
+    .s1-cush-sub {
+      font-size: 13px;
+      letter-spacing: 0.3em;
+      color: rgba(245,237,220,0.85);
+      text-transform: uppercase;
+      margin-top: 8px;
+      font-weight: 400;
+      text-shadow: 0 2px 15px rgba(0,0,0,0.9);
+    }
+
+    .s1-content {
+      position: absolute;
+      bottom: 120px;
+      left: 130px;
+      width: 1100px;
+      z-index: 5;
+    }
+
+    .s1-eyebrow {
+      font-size: 18px;
+      letter-spacing: 0.4em;
+      color: var(--gold-bright);
+      font-weight: 500;
+      text-transform: uppercase;
+      margin-bottom: 30px;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.9);
+    }
+
+    .s1-headline {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 96px;
+      font-weight: 700;
+      line-height: 1.05;
+      color: var(--white);
+      margin-bottom: 50px;
+      text-shadow: 0 8px 40px rgba(0,0,0,0.8);
+    }
+
+    .s1-headline em {
+      font-style: italic;
+      color: var(--gold-bright);
+      font-weight: 400;
+    }
+
+    .s1-divider {
+      width: 100px; height: 3px;
+      background: var(--gold);
+      margin-bottom: 35px;
+    }
+
+    .s1-name {
+      font-size: 26px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      color: var(--white);
+      margin-bottom: 12px;
+      text-shadow: 0 2px 15px rgba(0,0,0,0.9);
+    }
+
+    .s1-meta {
+      font-size: 16px;
+      letter-spacing: 0.25em;
+      color: var(--gold);
+      font-weight: 400;
+      text-transform: uppercase;
+      text-shadow: 0 2px 15px rgba(0,0,0,0.9);
+    }
+
+    /* ════════════════════════════════════════════════
+       SLIDE 2 — MEET SEAN
+    ════════════════════════════════════════════════ */
+    #s2 {
+      background: #14110c;
+      display: flex;
+    }
+
+    #s2.active { display: flex; }
+
+    .s2-left {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 60%, rgba(180,120,40,0.35) 0%, transparent 70%),
+        linear-gradient(165deg, #2a1f12 0%, #3a2818 30%, #1f1810 70%, #0e0a05 100%);
+    }
+
+    .s2-left-frame {
+      position: absolute;
+      inset: 100px;
+      border: 1px solid rgba(201,168,76,0.4);
+    }
+
+    .s2-portrait {
+      position: absolute;
+      inset: 130px;
+      background:
+        radial-gradient(ellipse 50% 70% at 50% 35%, rgba(220,160,80,0.25) 0%, transparent 60%),
+        linear-gradient(180deg, #4a3520 0%, #2a1f12 50%, #1a140a 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px;
+    }
+
+    .s2-initials {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 280px;
+      font-weight: 700;
+      color: rgba(201,168,76,0.5);
+      line-height: 0.9;
+      margin-bottom: 40px;
+      text-shadow: 0 20px 60px rgba(0,0,0,0.7);
+    }
+
+    .s2-name-tag {
+      text-align: center;
+    }
+
+    .s2-name-tag .name {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 48px;
+      color: var(--cream);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      margin-bottom: 10px;
+    }
+
+    .s2-name-tag .role {
+      font-size: 16px;
+      letter-spacing: 0.3em;
+      color: var(--gold);
+      text-transform: uppercase;
+    }
+
+    .s2-right {
+      width: 1020px;
+      padding: 110px 100px;
+      background: #0f0e0a;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .s2-eyebrow {
+      font-size: 16px;
+      letter-spacing: 0.35em;
+      color: var(--gold);
+      font-weight: 500;
+      text-transform: uppercase;
+      margin-bottom: 25px;
+    }
+
+    .s2-h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 68px;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.1;
+      margin-bottom: 30px;
+    }
+
+    .s2-h2 em {
+      font-style: italic;
+      color: var(--gold-bright);
+    }
+
+    .s2-quote {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic;
+      font-size: 26px;
+      line-height: 1.55;
+      color: var(--cream);
+      padding-left: 30px;
+      border-left: 3px solid var(--gold);
+      margin-bottom: 40px;
+    }
+
+    .s2-bio {
+      font-size: 18px;
+      line-height: 1.75;
+      color: rgba(245,237,220,0.75);
+      margin-bottom: 45px;
+    }
+
+    .s2-bullets {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    .s2-bullet {
+      display: flex;
+      gap: 22px;
+      align-items: flex-start;
+    }
+
+    .s2-bullet-icon {
+      width: 44px; height: 44px;
+      min-width: 44px;
+      border: 1px solid var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold);
+      font-size: 24px;
+      margin-top: 4px;
+    }
+
+    .s2-bullet-text strong {
+      display: block;
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--gold-bright);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .s2-bullet-text span {
+      font-size: 17px;
+      color: rgba(245,237,220,0.75);
+      line-height: 1.55;
+    }
+
+    /* ════════════════════════════════════════════════
+       SLIDE 3 — MARKET REALITY
+    ════════════════════════════════════════════════ */
+    #s3 {
+      background: #0a0a08;
+      padding: 120px 130px;
+    }
+
+    .s3-grid {
+      display: grid;
+      grid-template-columns: 900px 1fr;
+      gap: 90px;
+      height: 100%;
+    }
+
+    .s3-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .s3-eyebrow {
+      font-size: 16px;
+      letter-spacing: 0.35em;
+      color: var(--gold);
+      text-transform: uppercase;
+      font-weight: 500;
+      margin-bottom: 25px;
+    }
+
+    .s3-bar { width: 80px; height: 3px; background: var(--gold); margin-bottom: 35px; }
+
+    .s3-h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 80px;
+      font-weight: 700;
+      line-height: 1.05;
+      color: var(--white);
+      margin-bottom: 35px;
+      white-space: nowrap;
+    }
+
+    .s3-h2 em { font-style: italic; color: var(--gold-bright); }
+
+    .s3-body {
+      font-size: 20px;
+      line-height: 1.7;
+      color: rgba(245,237,220,0.78);
+      margin-bottom: 45px;
+      max-width: 720px;
+    }
+
+    .s3-point {
+      display: flex;
+      gap: 18px;
+      margin-bottom: 28px;
+      align-items: flex-start;
+    }
+
+    .s3-dot {
+      width: 10px; height: 10px;
+      min-width: 10px;
+      background: var(--gold);
+      border-radius: 50%;
+      margin-top: 14px;
+    }
+
+    .s3-point-text {
+      font-size: 19px;
+      line-height: 1.6;
+      color: rgba(245,237,220,0.85);
+    }
+
+    .s3-point-text strong {
+      color: var(--cream);
+      font-weight: 600;
+    }
+
+    /* Chart card */
+    .s3-right {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .s3-chart {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(201,168,76,0.25);
+      border-radius: 4px;
+      padding: 80px 60px;
+    }
+
+    .s3-chart-title {
+      font-size: 14px;
+      letter-spacing: 0.25em;
+      color: var(--gold);
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .s3-bars {
+      display: flex;
+      gap: 80px;
+      align-items: flex-end;
+      justify-content: center;
+      height: 480px;
+      margin-bottom: 30px;
+    }
+
+    .s3-bar-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .s3-val {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 42px;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1;
+    }
+
+    .s3-val.gold { color: var(--gold-bright); }
+
+    .s3-bar-shape {
+      width: 130px;
+      border-radius: 3px 3px 0 0;
+    }
+    .s3-bar-shape.turnkey {
+      height: 340px;
+      background: linear-gradient(0deg, var(--gold-deep), var(--gold-bright));
+      box-shadow: 0 0 60px rgba(201,168,76,0.4);
+    }
+    .s3-bar-shape.fixer {
+      height: 180px;
+      background: linear-gradient(0deg, #3a3835, #6a6560);
+    }
+
+    .s3-bar-name {
+      font-size: 14px;
+      letter-spacing: 0.18em;
+      color: var(--cream);
+      text-align: center;
+      text-transform: uppercase;
+      line-height: 1.5;
+      margin-top: 12px;
+    }
+
+    .s3-chart-footer {
+      text-align: center;
+      font-size: 13px;
+      color: var(--mid-gray);
+      letter-spacing: 0.15em;
+      margin-top: 30px;
+    }
+
+    /* ════════════════════════════════════════════════
+       SLIDE 4 — ROI
+    ════════════════════════════════════════════════ */
+    #s4 {
+      background: #0c0b09;
+      padding: 80px 130px;
+    }
+
+    .s4-header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .s4-eyebrow {
+      font-size: 16px;
+      letter-spacing: 0.35em;
+      color: var(--gold);
+      text-transform: uppercase;
+      font-weight: 500;
+      margin-bottom: 25px;
+    }
+
+    .s4-bar { width: 80px; height: 3px; background: var(--gold); margin: 0 auto 25px; }
+
+    .s4-h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 64px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 18px;
+      line-height: 1.1;
+    }
+
+    .s4-sub {
+      font-size: 20px;
+      color: rgba(245,237,220,0.65);
+      max-width: 1100px;
+      margin: 0 auto;
+      line-height: 1.55;
+    }
+
+    .s4-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0 auto 40px;
+      table-layout: fixed;
+    }
+
+    .s4-table th {
+      padding: 18px 30px;
+      font-size: 13px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 500;
+      text-align: left;
+      border-bottom: 2px solid rgba(201,168,76,0.5);
+    }
+
+    .s4-table th:not(:first-child) { text-align: center; }
+
+    .s4-table td {
+      padding: 20px 30px;
+      font-size: 19px;
+      color: rgba(245,237,220,0.85);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      vertical-align: middle;
+      line-height: 1.4;
+    }
+
+    .s4-table td:not(:first-child) { text-align: center; }
+
+    .s4-table td.metric { color: var(--cream); font-weight: 600; }
+    .s4-table td.good { color: var(--gold-bright); font-weight: 600; }
+    .s4-table td.bad { color: var(--light-gray); }
+    .s4-table tr:last-child td { border-bottom: none; }
+
+    .s4-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+    }
+
+    .s4-stat {
+      background: linear-gradient(180deg, rgba(201,168,76,0.12), rgba(201,168,76,0.04));
+      border: 1px solid rgba(201,168,76,0.35);
+      padding: 35px 30px;
+      text-align: center;
+      border-radius: 3px;
+    }
+
+    .s4-stat-num {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 64px;
+      font-weight: 700;
+      color: var(--gold-bright);
+      line-height: 1;
+      margin-bottom: 14px;
+    }
+
+    .s4-stat-label {
+      font-size: 13px;
+      letter-spacing: 0.22em;
+      color: rgba(245,237,220,0.7);
+      text-transform: uppercase;
+      line-height: 1.5;
+    }
+
+    /* ════════════════════════════════════════════════
+       SLIDE 5 — CONCIERGE
+    ════════════════════════════════════════════════ */
+    #s5 {
+      background: var(--dark);
+      display: flex;
+    }
+    #s5.active { display: flex; }
+
+    .s5-left {
+      width: 850px;
+      background: #0a0c0a;
+      position: relative;
+      padding: 100px 80px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .s5-palette {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .s5-swatch {
+      border-radius: 3px;
+      display: flex;
+      align-items: flex-end;
+      padding: 25px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+    }
+
+    .s5-swatch-label {
+      font-size: 13px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.85);
+      font-weight: 600;
+    }
+
+    .swatch-sage { background: linear-gradient(135deg, #7a8c72 0%, #5e7056 100%); height: 280px; }
+    .swatch-oak { background: linear-gradient(135deg, #b8936a 0%, #8a6040 100%); height: 280px; }
+    .swatch-brass {
+      height: 180px;
+      background: linear-gradient(135deg, #c9a84c 0%, #9a7830 100%);
+      grid-column: span 2;
+    }
+    .swatch-white {
+      height: 180px;
+      background: linear-gradient(135deg, #e8e4dc 0%, #d4cfc5 100%);
+    }
+    .swatch-white .s5-swatch-label { color: rgba(0,0,0,0.6); }
+    .swatch-charcoal {
+      height: 180px;
+      background: linear-gradient(135deg, #2c2c28 0%, #1a1a16 100%);
+    }
+
+    .s5-palette-tag {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 13px;
+      letter-spacing: 0.3em;
+      color: rgba(201,168,76,0.6);
+      text-transform: uppercase;
+    }
+
+    .s5-right {
+      flex: 1;
+      background: #0d0d0a;
+      padding: 110px 90px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .s5-eyebrow {
+      font-size: 16px;
+      letter-spacing: 0.35em;
+      color: var(--gold);
+      text-transform: uppercase;
+      font-weight: 500;
+      margin-bottom: 25px;
+    }
+
+    .s5-bar { width: 80px; height: 3px; background: var(--gold); margin-bottom: 35px; }
+
+    .s5-h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 72px;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.05;
+      margin-bottom: 40px;
+    }
+
+    .s5-h2 em { font-style: italic; color: var(--gold-bright); }
+
+    .s5-how-card {
+      background: linear-gradient(180deg, rgba(201,168,76,0.12), rgba(201,168,76,0.04));
+      border-left: 3px solid var(--gold);
+      padding: 30px 35px;
+      margin-bottom: 45px;
+    }
+
+    .s5-how-title {
+      font-size: 14px;
+      letter-spacing: 0.25em;
+      color: var(--gold);
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .s5-how-text {
+      font-size: 18px;
+      line-height: 1.7;
+      color: rgba(245,237,220,0.85);
+    }
+
+    .s5-services-label {
+      font-size: 14px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 22px;
+      font-weight: 500;
+    }
+
+    .s5-services {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px 30px;
+    }
+
+    .s5-service {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 18px;
+      color: rgba(245,237,220,0.85);
+    }
+
+    .s5-service::before {
+      content: '';
+      width: 8px; height: 8px;
+      min-width: 8px;
+      background: var(--gold);
+      border-radius: 50%;
+    }
+
+    /* ════════════════════════════════════════════════
+       SLIDE 6 — 21-DAY SPRINT
+    ════════════════════════════════════════════════ */
+    #s6 {
+      background: #0a0a08;
+      padding: 100px 130px;
+    }
+
+    .s6-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .s6-eyebrow {
+      font-size: 16px;
+      letter-spacing: 0.35em;
+      color: var(--gold);
+      text-transform: uppercase;
+      font-weight: 500;
+      margin-bottom: 25px;
+    }
+
+    .s6-bar { width: 80px; height: 3px; background: var(--gold); margin: 0 auto 35px; }
+
+    .s6-h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 76px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 25px;
+      line-height: 1.1;
+    }
+
+    .s6-sub {
+      font-size: 21px;
+      color: rgba(245,237,220,0.65);
+      max-width: 1200px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .s6-timeline {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+      position: relative;
+      margin-bottom: 50px;
+    }
+
+    .s6-timeline::before {
+      content: '';
+      position: absolute;
+      top: 60px;
+      left: 12%; right: 12%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), var(--gold), transparent);
+      opacity: 0.5;
+      z-index: 0;
+    }
+
+    .s6-week {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(201,168,76,0.3);
+      border-radius: 3px;
+      padding: 80px 40px 50px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .s6-week-node {
+      position: absolute;
+      top: -32px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 64px; height: 64px;
+      background: var(--gold);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--dark);
+      box-shadow: 0 8px 30px rgba(201,168,76,0.4);
+    }
+
+    .s6-week-label {
+      font-size: 13px;
+      letter-spacing: 0.3em;
+      color: var(--gold);
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 12px;
+      font-weight: 500;
+    }
+
+    .s6-week-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--white);
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .s6-week-items {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .s6-week-items li {
+      font-size: 16px;
+      color: rgba(245,237,220,0.75);
+      line-height: 1.5;
+      padding-left: 18px;
+      position: relative;
+    }
+
+    .s6-week-items li::before {
+      content: '—';
+      color: var(--gold);
+      opacity: 0.7;
+      position: absolute;
+      left: 0;
+    }
+
+    .s6-callout {
+      padding: 26px 40px;
+      background: linear-gradient(90deg, rgba(201,168,76,0.15), rgba(201,168,76,0.05));
+      border: 1px solid rgba(201,168,76,0.4);
+      text-align: center;
+      font-size: 19px;
+      color: var(--cream);
+      letter-spacing: 0.04em;
+      line-height: 1.5;
+    }
+
+    /* ════════════════════════════════════════════════
+       SLIDE 7 — TRACK RECORD
+    ════════════════════════════════════════════════ */
+    #s7 {
+      background: #0c0b09;
+      padding: 110px 130px;
+    }
+
+    .s7-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .s7-eyebrow {
+      font-size: 16px;
+      letter-spacing: 0.35em;
+      color: var(--gold);
+      text-transform: uppercase;
+      font-weight: 500;
+      margin-bottom: 25px;
+    }
+
+    .s7-bar { width: 80px; height: 3px; background: var(--gold); margin: 0 auto 35px; }
+
+    .s7-h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 76px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 22px;
+      line-height: 1.1;
+    }
+
+    .s7-sub {
+      font-size: 22px;
+      color: rgba(245,237,220,0.6);
+      font-style: italic;
+    }
+
+    .s7-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 35px;
+    }
+
+    .s7-card {
+      border: 1px solid rgba(201,168,76,0.25);
+      overflow: hidden;
+      border-radius: 3px;
+      background: rgba(255,255,255,0.03);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+
+    .s7-photo {
+      height: 300px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .photo-mandana {
+      background:
+        radial-gradient(ellipse 60% 50% at 50% 40%, rgba(255,200,80,0.3) 0%, transparent 70%),
+        linear-gradient(160deg, #1a2a1a 0%, #2a3a20 30%, #3a5028 55%, #2a3820 80%, #1e2818 100%);
+    }
+    .photo-overlook {
+      background:
+        radial-gradient(ellipse 60% 50% at 50% 35%, rgba(255,180,80,0.3) 0%, transparent 70%),
+        linear-gradient(140deg, #2a1f10 0%, #3e3018 30%, #5a4020 55%, #382818 80%, #1e1810 100%);
+    }
+    .photo-bretharte {
+      background:
+        radial-gradient(ellipse 60% 50% at 50% 35%, rgba(180,200,255,0.25) 0%, transparent 70%),
+        linear-gradient(150deg, #101820 0%, #1a2838 30%, #2a3d55 55%, #1e2838 80%, #141e28 100%);
+    }
+
+    /* House silhouette */
+    .s7-photo::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 55%; height: 65%;
+      background: rgba(0,0,0,0.45);
+      clip-path: polygon(15% 100%, 15% 55%, 0% 55%, 50% 0%, 100% 55%, 85% 55%, 85% 100%);
+    }
+
+    .s7-card-body {
+      padding: 35px 35px 40px;
+    }
+
+    .s7-address {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--gold-bright);
+      letter-spacing: 0.08em;
+      margin-bottom: 25px;
+      text-transform: uppercase;
+    }
+
+    .s7-prices {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 25px;
+    }
+
+    .s7-price-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 17px;
+    }
+
+    .s7-price-row .label {
+      color: var(--light-gray);
+      letter-spacing: 0.1em;
+      font-size: 14px;
+      text-transform: uppercase;
+    }
+
+    .s7-price-row .value { color: var(--white); font-weight: 600; font-size: 18px; }
+    .s7-price-row .value.sold { color: var(--gold-bright); font-weight: 700; font-size: 20px; }
+
+    .s7-result {
+      font-size: 15px;
+      color: rgba(245,237,220,0.7);
+      line-height: 1.6;
+      padding-top: 22px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      font-style: italic;
+    }
+
+    /* ════════════════════════════════════════════════
+       SLIDE 8 — PRESS
+    ════════════════════════════════════════════════ */
+    #s8 {
+      background: #080807;
+      padding: 110px 130px;
+    }
+
+    .s8-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .s8-eyebrow {
+      font-size: 16px;
+      letter-spacing: 0.35em;
+      color: var(--gold);
+      text-transform: uppercase;
+      font-weight: 500;
+      margin-bottom: 25px;
+    }
+
+    .s8-bar { width: 80px; height: 3px; background: var(--gold); margin: 0 auto 35px; }
+
+    .s8-h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 72px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 25px;
+      line-height: 1.1;
+    }
+
+    .s8-sub {
+      font-size: 21px;
+      color: rgba(245,237,220,0.65);
+      max-width: 1300px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .s8-pubs {
+      display: flex;
+      justify-content: center;
+      gap: 90px;
+      margin-bottom: 60px;
+      padding: 50px 0;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .s8-pub {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 38px;
+      font-style: italic;
+      color: rgba(245,237,220,0.55);
+      font-weight: 400;
+    }
+
+    .s8-pub.dwell { font-size: 56px; font-weight: 900; font-style: normal; }
+    .s8-pub.sfgate { font-style: normal; font-family: 'Inter', sans-serif; font-weight: 700; font-size: 36px; }
+    .s8-pub.eichler { font-style: normal; font-size: 26px; letter-spacing: 0.12em; font-weight: 500; }
+    .s8-pub.bi { font-style: normal; font-family: 'Inter', sans-serif; font-weight: 800; font-size: 28px; letter-spacing: 0.02em; }
+
+    .s8-coverage {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+    }
+
+    .s8-feature {
+      border-left: 3px solid rgba(201,168,76,0.5);
+      padding: 28px 38px;
+      background: rgba(255,255,255,0.03);
+    }
+
+    .s8-feature-pub {
+      font-size: 13px;
+      letter-spacing: 0.3em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      font-weight: 500;
+    }
+
+    .s8-feature-headline {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      font-style: italic;
+      color: var(--cream);
+      line-height: 1.45;
+    }
+
+    /* ════════════════════════════════════════════════
+       SLIDE 9 — REVIEWS
+    ════════════════════════════════════════════════ */
+    #s9 {
+      background: #0c0b09;
+      padding: 90px 130px;
+    }
+
+    .s9-header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .s9-stars {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .star {
+      color: var(--gold);
+      font-size: 56px;
+      line-height: 1;
+    }
+
+    .s9-rating-label {
+      font-size: 14px;
+      letter-spacing: 0.35em;
+      color: var(--light-gray);
+      text-transform: uppercase;
+      margin-bottom: 50px;
+    }
+
+    .s9-h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 76px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 0;
+      line-height: 1.1;
+    }
+
+    .s9-quotes {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+
+    .s9-quote-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(201,168,76,0.2);
+      padding: 45px 45px 40px;
+      position: relative;
+    }
+
+    .s9-quote-card::before {
+      content: '\201C';
+      position: absolute;
+      top: 8px; left: 18px;
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 90px;
+      color: rgba(201,168,76,0.3);
+      line-height: 1;
+    }
+
+    .s9-quote-text {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 21px;
+      font-style: italic;
+      color: var(--cream);
+      line-height: 1.65;
+      margin-bottom: 25px;
+      position: relative;
+    }
+
+    .s9-quote-attr {
+      font-size: 14px;
+      letter-spacing: 0.25em;
+      color: var(--gold);
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+
+    .s9-platforms {
+      display: flex;
+      justify-content: center;
+      gap: 60px;
+      margin-top: 40px;
+    }
+
+    .s9-platform {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      color: var(--light-gray);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .s9-platform-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--gold);
+    }
+
+    /* ════════════════════════════════════════════════
+       SLIDE 10 — CLOSING CTA
+    ════════════════════════════════════════════════ */
+    #s10 {
+      background: var(--dark);
+      position: relative;
+    }
+
+    .s10-canvas {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 70% 50% at 50% 80%, rgba(60,100,40,0.3) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 80% at 50% 0%, rgba(40,70,110,0.3) 0%, transparent 60%),
+        linear-gradient(180deg, #0d1a2e 0%, #1a2a42 25%, #1e3050 45%, #1a2a3e 60%, #1e3028 78%, #0e1a10 92%, #080e08 100%);
+    }
+
+    /* Warm window glow — hidden on this slide; contact card replaces the focus */
+    .s10-windows { display: none; }
+    .s10-window { display: none; }
+
+    .s10-ground {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 260px;
+      background:
+        radial-gradient(ellipse 70% 60% at 50% 100%, rgba(40,80,30,0.55) 0%, transparent 70%);
+    }
+
+    /* House silhouette — also hidden so closing slide stays clean */
+    .s10-house-shape { display: none; }
+
+    .s10-content {
+      position: absolute;
+      top: 130px; left: 130px;
+      width: 1200px;
+      z-index: 5;
+    }
+
+    .s10-eyebrow {
+      font-size: 18px;
+      letter-spacing: 0.4em;
+      color: var(--gold-bright);
+      text-transform: uppercase;
+      font-weight: 500;
+      margin-bottom: 30px;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.9);
+    }
+
+    .s10-h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 108px;
+      font-weight: 700;
+      line-height: 1.0;
+      color: var(--white);
+      margin-bottom: 35px;
+      text-shadow: 0 8px 40px rgba(0,0,0,0.9);
+    }
+
+    .s10-h2 em {
+      font-style: italic;
+      color: var(--gold-bright);
+      font-weight: 400;
+    }
+
+    .s10-divider {
+      width: 100px; height: 3px;
+      background: var(--gold);
+      margin-bottom: 35px;
+    }
+
+    .s10-body {
+      font-size: 21px;
+      color: rgba(245,237,220,0.85);
+      line-height: 1.65;
+      max-width: 800px;
+      text-shadow: 0 2px 15px rgba(0,0,0,0.9);
+    }
+
+    .s10-contact {
+      position: absolute;
+      bottom: 130px;
+      left: 130px;
+      right: 130px;
+      z-index: 5;
+      background: rgba(10,8,5,0.6);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(201,168,76,0.4);
+      padding: 50px 60px;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 35px 60px;
+    }
+
+    .s10-c-item .label {
+      font-size: 12px;
+      letter-spacing: 0.3em;
+      color: var(--gold);
+      text-transform: uppercase;
+      font-weight: 500;
+      margin-bottom: 10px;
+    }
+
+    .s10-c-item .value {
+      font-size: 22px;
+      color: var(--white);
+      font-weight: 400;
+    }
+
+    .s10-badge {
+      position: absolute;
+      top: 130px; right: 130px;
+      z-index: 5;
+      text-align: right;
+    }
+
+    .s10-badge-name {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 42px;
+      font-weight: 700;
+      color: var(--white);
+      text-shadow: 0 2px 20px rgba(0,0,0,0.9);
+    }
+
+    .s10-badge-brokerage {
+      font-size: 14px;
+      letter-spacing: 0.3em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-top: 8px;
+      text-shadow: 0 2px 15px rgba(0,0,0,0.9);
+    }
+
+    .s10-badge-dre {
+      font-size: 12px;
+      color: var(--light-gray);
+      letter-spacing: 0.2em;
+      margin-top: 8px;
+      text-shadow: 0 2px 15px rgba(0,0,0,0.9);
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═════════════ SLIDE 1 — TITLE ═════════════ -->
+<section class="slide" id="s1">
+  <div class="s1-canvas"></div>
+  <div class="s1-view"></div>
+  <div class="s1-floor"></div>
+  <div class="s1-cush">
+    <div class="s1-cush-logo">CUSH</div>
+    <div class="s1-cush-sub">Real Estate By Design</div>
+  </div>
+  <div class="s1-content">
+    <div class="s1-eyebrow">Seller Listing Presentation</div>
+    <h1 class="s1-headline">
+      Maximizing Your<br>
+      Home's Value Through<br>
+      <em>Strategic Design</em>
+    </h1>
+    <div class="s1-divider"></div>
+    <div class="s1-name">SEAN WALSH &nbsp;|&nbsp; REALTOR®</div>
+    <div class="s1-meta">OAKLAND &nbsp;·&nbsp; PIEDMONT &nbsp;·&nbsp; BERKELEY</div>
+  </div>
+</section>
+
+<!-- ═════════════ SLIDE 2 — MEET SEAN ═════════════ -->
+<section class="slide" id="s2">
+  <div class="s2-left">
+    <div class="s2-left-frame"></div>
+    <div class="s2-portrait">
+      <div class="s2-initials">SW</div>
+      <div class="s2-name-tag">
+        <div class="name">Sean Walsh</div>
+        <div class="role">Realtor® · DRE# 01993112</div>
+      </div>
+    </div>
+  </div>
+  <div class="s2-right">
+    <div class="s2-eyebrow">Meet Your Agent</div>
+    <div class="gold-bar" style="margin-bottom: 35px;"></div>
+    <h2 class="s2-h2">Expertise Meets <em>Execution</em></h2>
+    <p class="s2-quote">"I track the return on improvements, explain the strategy in plain language, and keep the process calm and transparent throughout."</p>
+    <p class="s2-bio">Born and raised in the Bay Area and now raising my family right here in Oakland — my approach to real estate is rooted in community and design. Backed by Cush Real Estate's elite marketing resources, I deliver boutique-level service with a high-performance execution plan.</p>
+    <div class="s2-bullets">
+      <div class="s2-bullet">
+        <div class="s2-bullet-icon">✓</div>
+        <div class="s2-bullet-text">
+          <strong>Top Producer</strong>
+          <span>Specializing in Oakland, Piedmont, and Berkeley's finest neighborhoods.</span>
+        </div>
+      </div>
+      <div class="s2-bullet">
+        <div class="s2-bullet-icon">✓</div>
+        <div class="s2-bullet-text">
+          <strong>Design-Led Strategy</strong>
+          <span>Expert in preparing and positioning your home for the strongest financial outcome.</span>
+        </div>
+      </div>
+      <div class="s2-bullet">
+        <div class="s2-bullet-icon">✓</div>
+        <div class="s2-bullet-text">
+          <strong>The Anti-Flip Promise</strong>
+          <span>I champion a premium integrity lane — upgrades that respect the home's era and architectural identity, maximizing appeal without chasing fleeting trends.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════════ SLIDE 3 — MARKET REALITY ═════════════ -->
+<section class="slide" id="s3">
+  <div class="s3-grid">
+    <div class="s3-left">
+      <div class="s3-eyebrow">The Market Reality</div>
+      <div class="s3-bar"></div>
+      <h2 class="s3-h2">The <em>Move-In-Ready</em><br>Premium</h2>
+      <p class="s3-body">Today's East Bay buyers are looking for a turnkey aesthetic. They want the dream, not the project. In a shifting market where active listings are increasing, homes that are professionally prepared and staged command an undeniable premium — and stand apart from the competition.</p>
+      <div class="s3-point">
+        <div class="s3-dot"></div>
+        <div class="s3-point-text"><strong>The Remote Work Shift:</strong> Buyers are expanding their search areas. Your online presentation <em>is</em> your first showing — make it count.</div>
+      </div>
+      <div class="s3-point">
+        <div class="s3-dot"></div>
+        <div class="s3-point-text"><strong>The "As-Is" Penalty:</strong> Homes requiring extensive repairs sit longer, endure price reductions, and attract lowball investor offers.</div>
+      </div>
+      <div class="s3-point">
+        <div class="s3-dot"></div>
+        <div class="s3-point-text"><strong>Our Goal:</strong> Make your home the definitive move-in-ready masterpiece on the market.</div>
+      </div>
+    </div>
+    <div class="s3-right">
+      <div class="s3-chart">
+        <div class="s3-chart-title">East Bay Sale Price Premium</div>
+        <div class="s3-bars">
+          <div class="s3-bar-group">
+            <div class="s3-val gold">+15%</div>
+            <div class="s3-bar-shape turnkey"></div>
+            <div class="s3-bar-name">Staged &amp;<br>Prepped</div>
+          </div>
+          <div class="s3-bar-group">
+            <div class="s3-val">Baseline</div>
+            <div class="s3-bar-shape fixer"></div>
+            <div class="s3-bar-name">As-Is /<br>Fixer</div>
+          </div>
+        </div>
+        <div class="s3-chart-footer">Representative data · East Bay residential market 2022–2024</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════════ SLIDE 4 — ROI ═════════════ -->
+<section class="slide" id="s4">
+  <div class="s4-header">
+    <div class="s4-eyebrow">Staging &amp; Preparation ROI</div>
+    <div class="s4-bar"></div>
+    <h2 class="s4-h2">Design That Delivers a Return</h2>
+    <p class="s4-sub">Strategic preparation isn't an expense — it is the highest-yielding investment you can make in your property before going to market.</p>
+  </div>
+  <table class="s4-table">
+    <thead>
+      <tr>
+        <th style="width: 28%;">Metric</th>
+        <th style="width: 36%;">Staged &amp; Prepped Homes</th>
+        <th style="width: 36%;">Non-Staged Homes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="metric">Time on Market</td>
+        <td class="good">78% Less Time on Market</td>
+        <td class="bad">Extended Days on Market</td>
+      </tr>
+      <tr>
+        <td class="metric">Sale Price vs. List</td>
+        <td class="good">5% to 20%+ Over List</td>
+        <td class="bad">At or Below List / Price Reductions</td>
+      </tr>
+      <tr>
+        <td class="metric">Buyer Engagement</td>
+        <td class="good">Maximum Emotional Connection</td>
+        <td class="bad">Distracted by Deferred Work</td>
+      </tr>
+      <tr>
+        <td class="metric">Offer Volume</td>
+        <td class="good">Multiple-Offer Scenarios Common</td>
+        <td class="bad">Single or No Offers</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="s4-stats">
+    <div class="s4-stat">
+      <div class="s4-stat-num">78%</div>
+      <div class="s4-stat-label">Faster Sale<br>When Staged</div>
+    </div>
+    <div class="s4-stat">
+      <div class="s4-stat-num">5–20%</div>
+      <div class="s4-stat-label">Higher Sale Price<br>vs. Non-Staged</div>
+    </div>
+    <div class="s4-stat">
+      <div class="s4-stat-num">$0</div>
+      <div class="s4-stat-label">Upfront Cost via<br>Cush Concierge</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════════ SLIDE 5 — CONCIERGE ═════════════ -->
+<section class="slide" id="s5">
+  <div class="s5-left">
+    <div class="s5-palette">
+      <div class="s5-swatch swatch-sage"><div class="s5-swatch-label">Sage Green</div></div>
+      <div class="s5-swatch swatch-oak"><div class="s5-swatch-label">Natural Oak</div></div>
+      <div class="s5-swatch swatch-brass"><div class="s5-swatch-label">Antique Brass Hardware</div></div>
+      <div class="s5-swatch swatch-white"><div class="s5-swatch-label">Warm White</div></div>
+      <div class="s5-swatch swatch-charcoal"><div class="s5-swatch-label">Deep Charcoal</div></div>
+    </div>
+    <div class="s5-palette-tag">Curated Design Palette · 2025</div>
+  </div>
+  <div class="s5-right">
+    <div class="s5-eyebrow">Cush Concierge &amp; Design Services</div>
+    <div class="s5-bar"></div>
+    <h2 class="s5-h2">Zero Upfront<br>Costs — <em>Guaranteed</em></h2>
+    <div class="s5-how-card">
+      <div class="s5-how-title">How It Works</div>
+      <div class="s5-how-text">We cover the upfront costs of all home improvements to maximize your sale price. You simply pay it back at closing — no interest, no hidden fees.</div>
+    </div>
+    <div class="s5-services-label">What We Manage For You</div>
+    <div class="s5-services">
+      <div class="s5-service">Professional Staging &amp; Design</div>
+      <div class="s5-service">Interior &amp; Exterior Painting</div>
+      <div class="s5-service">Hardwood Flooring &amp; Carpet</div>
+      <div class="s5-service">Lighting &amp; Fixture Updates</div>
+      <div class="s5-service">Landscaping &amp; Curb Appeal</div>
+      <div class="s5-service">Deep Cleaning &amp; Pest Reports</div>
+      <div class="s5-service">Sewer Lateral Compliance</div>
+      <div class="s5-service">Kitchen &amp; Bath Refreshes</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════════ SLIDE 6 — 21-DAY SPRINT ═════════════ -->
+<section class="slide" id="s6">
+  <div class="s6-header">
+    <div class="s6-eyebrow">Your Timeline to Market</div>
+    <div class="s6-bar"></div>
+    <h2 class="s6-h2">The 21-Day Sprint to Market</h2>
+    <p class="s6-sub">You don't have to lift a finger. We provide a turnkey project management experience, transforming your property into a luxury listing — efficiently and beautifully.</p>
+  </div>
+  <div class="s6-timeline">
+    <div class="s6-week">
+      <div class="s6-week-node">1</div>
+      <div class="s6-week-label">Days 1–7</div>
+      <div class="s6-week-title">Strategy &amp; Sourcing</div>
+      <ul class="s6-week-items">
+        <li>In-depth ROI analysis of all proposed improvements</li>
+        <li>Establish the signature design palette for your home</li>
+        <li>Pull compliance reports (pest, sewer lateral)</li>
+        <li>Book our trusted vendor network and lock the calendar</li>
+        <li>Finalize pricing strategy and comparable market analysis</li>
+      </ul>
+    </div>
+    <div class="s6-week">
+      <div class="s6-week-node">2</div>
+      <div class="s6-week-label">Days 8–14</div>
+      <div class="s6-week-title">Execution</div>
+      <ul class="s6-week-items">
+        <li>Interior and exterior painting by trusted craftspeople</li>
+        <li>Hardwood refinishing or new flooring installation</li>
+        <li>Landscaping, garden clean-up, and curb appeal refresh</li>
+        <li>Fixture updates, lighting, and hardware upgrades</li>
+        <li>All compliance and repair work completed and signed off</li>
+      </ul>
+    </div>
+    <div class="s6-week">
+      <div class="s6-week-node">3</div>
+      <div class="s6-week-label">Days 15–21</div>
+      <div class="s6-week-title">The Finishing Touch</div>
+      <ul class="s6-week-items">
+        <li>Professional staging — every room curated for maximum impact</li>
+        <li>Editorial-level photography and twilight exterior shots</li>
+        <li>Cinematic videography and 3D Matterport tour</li>
+        <li>Targeted digital marketing campaign goes live</li>
+        <li>Broker preview, open houses, and offer date strategy</li>
+      </ul>
+    </div>
+  </div>
+  <div class="s6-callout">
+    From our first conversation to the day we open your doors to buyers — every detail is handled by our team. Your only job: say yes.
+  </div>
+</section>
+
+<!-- ═════════════ SLIDE 7 — TRACK RECORD ═════════════ -->
+<section class="slide" id="s7">
+  <div class="s7-header">
+    <div class="s7-eyebrow">Proven Results</div>
+    <div class="s7-bar"></div>
+    <h2 class="s7-h2">A Track Record of Success</h2>
+    <p class="s7-sub">When design meets strategy, the numbers speak for themselves.</p>
+  </div>
+  <div class="s7-grid">
+    <div class="s7-card">
+      <div class="s7-photo photo-mandana"></div>
+      <div class="s7-card-body">
+        <div class="s7-address">1101 Mandana Blvd · Oakland</div>
+        <div class="s7-prices">
+          <div class="s7-price-row"><span class="label">Listed At</span><span class="value">$2,250,000</span></div>
+          <div class="s7-price-row"><span class="label">Sold For</span><span class="value sold">$3,250,000</span></div>
+          <div class="s7-price-row"><span class="label">Over Ask</span><span class="value sold">+$1,000,000</span></div>
+        </div>
+        <div class="s7-result">Flawless preparation and precision marketing captured $1M over list in a competitive Grand Lake offering.</div>
+      </div>
+    </div>
+    <div class="s7-card">
+      <div class="s7-photo photo-overlook"></div>
+      <div class="s7-card-body">
+        <div class="s7-address">30 Overlook Ct · Oakland</div>
+        <div class="s7-prices">
+          <div class="s7-price-row"><span class="label">Listed At</span><span class="value">$949,000</span></div>
+          <div class="s7-price-row"><span class="label">Sold For</span><span class="value sold">$1,625,000</span></div>
+          <div class="s7-price-row"><span class="label">Over Ask</span><span class="value sold">+$676,000</span></div>
+        </div>
+        <div class="s7-result">Massive over-ask outcome driven by a turnkey buyer experience and a targeted digital marketing strategy.</div>
+      </div>
+    </div>
+    <div class="s7-card">
+      <div class="s7-photo photo-bretharte"></div>
+      <div class="s7-card-body">
+        <div class="s7-address">150 Bret Harte Rd · Berkeley</div>
+        <div class="s7-prices">
+          <div class="s7-price-row"><span class="label">Listed At</span><span class="value">$2,650,000</span></div>
+          <div class="s7-price-row"><span class="label">Sold For</span><span class="value sold">$2,400,000</span></div>
+          <div class="s7-price-row"><span class="label">Market</span><span class="value" style="color: var(--light-gray);">Architecturally Sig.</span></div>
+        </div>
+        <div class="s7-result">Successfully positioned a rare, architecturally significant estate to a global buyer pool in a complex market environment.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════════ SLIDE 8 — PRESS ═════════════ -->
+<section class="slide" id="s8">
+  <div class="s8-header">
+    <div class="s8-eyebrow">Media &amp; Recognition</div>
+    <div class="s8-bar"></div>
+    <h2 class="s8-h2">Recognized by Global Design Authorities</h2>
+    <p class="s8-sub">My listings don't just hit the MLS — they make headlines. By elevating your home's design, we capture the attention of luxury buyers and major architectural publications worldwide.</p>
+  </div>
+  <div class="s8-pubs">
+    <div class="s8-pub dwell">Dwell</div>
+    <div class="s8-pub sfgate">SF Gate</div>
+    <div class="s8-pub eichler">Eichler Network</div>
+    <div class="s8-pub bi">Business Insider</div>
+  </div>
+  <div class="s8-coverage">
+    <div class="s8-feature">
+      <div class="s8-feature-pub">Dwell Magazine</div>
+      <div class="s8-feature-headline">"High in the Oakland Hills, a Midcentury With Unbeatable Bay Views Lists at a Lofty $2.9M"</div>
+    </div>
+    <div class="s8-feature">
+      <div class="s8-feature-pub">Dwell Magazine</div>
+      <div class="s8-feature-headline">"A Finely Finished Craftsman Commands $1.5M in Oakland"</div>
+    </div>
+    <div class="s8-feature">
+      <div class="s8-feature-pub">SF Gate</div>
+      <div class="s8-feature-headline">"Frank Lloyd Wright protégé-designed home for sale for $2.8M"</div>
+    </div>
+    <div class="s8-feature">
+      <div class="s8-feature-pub">Eichler Network</div>
+      <div class="s8-feature-headline">"Circular Gem in a Slow Market" — a masterclass in design-led positioning</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════════ SLIDE 9 — REVIEWS ═════════════ -->
+<section class="slide" id="s9">
+  <div class="s9-header">
+    <div class="s9-stars">
+      <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+    </div>
+    <div class="s9-rating-label">5.0 Rating &nbsp;·&nbsp; Zillow &amp; Yelp</div>
+    <h2 class="s9-h2">What Our Sellers Say</h2>
+  </div>
+  <div class="s9-quotes">
+    <div class="s9-quote-card">
+      <p class="s9-quote-text">Sean tracks the return on improvements, explains the strategy in plain language, and keeps the process calm and transparent throughout. We always knew exactly where we stood.</p>
+      <div class="s9-quote-attr">Verified Seller · Oakland Hills</div>
+    </div>
+    <div class="s9-quote-card">
+      <p class="s9-quote-text">The Concierge program was a complete game-changer. Sean managed the painters, the stagers, and the landscapers — all of it. Our home looked so good we almost didn't want to leave. It sold for well over asking.</p>
+      <div class="s9-quote-attr">Verified Seller · Piedmont</div>
+    </div>
+    <div class="s9-quote-card">
+      <p class="s9-quote-text">Sean's design eye is second to none. He walked through our house and within minutes had a clear vision for what would resonate with buyers. The result was multiple offers the first weekend.</p>
+      <div class="s9-quote-attr">Verified Seller · Rockridge, Oakland</div>
+    </div>
+    <div class="s9-quote-card">
+      <p class="s9-quote-text">From our first meeting to the close of escrow, Sean was the most professional, calm, and communicative agent we've ever worked with. He made a potentially stressful process feel effortless.</p>
+      <div class="s9-quote-attr">Verified Seller · Temescal, Oakland</div>
+    </div>
+  </div>
+  <div class="s9-platforms">
+    <div class="s9-platform"><div class="s9-platform-dot"></div>Zillow Premier Agent</div>
+    <div class="s9-platform"><div class="s9-platform-dot"></div>Yelp 5-Star Verified</div>
+    <div class="s9-platform"><div class="s9-platform-dot"></div>Google Reviews</div>
+  </div>
+</section>
+
+<!-- ═════════════ SLIDE 10 — CLOSING CTA ═════════════ -->
+<section class="slide" id="s10">
+  <div class="s10-canvas"></div>
+  <div class="s10-house-shape"></div>
+  <div class="s10-windows">
+    <div class="s10-window"></div>
+    <div class="s10-window"></div>
+    <div class="s10-window"></div>
+  </div>
+  <div class="s10-ground"></div>
+  <div class="s10-badge">
+    <div class="s10-badge-name">Sean Walsh</div>
+    <div class="s10-badge-brokerage">Cush Real Estate By Design</div>
+    <div class="s10-badge-dre">DRE# 01993112</div>
+  </div>
+  <div class="s10-content">
+    <div class="s10-eyebrow">Let's Get Started</div>
+    <h2 class="s10-h2">Ready to <em>Maximize</em><br>Your Home's Value?</h2>
+    <div class="s10-divider"></div>
+    <p class="s10-body">If you want a trusted Oakland listing agent who understands design, preparation, and how to position your home for the strongest possible outcome — I am ready to guide you from keys to close.</p>
+  </div>
+  <div class="s10-contact">
+    <div class="s10-c-item">
+      <div class="label">Phone</div>
+      <div class="value">510.338.7144</div>
+    </div>
+    <div class="s10-c-item">
+      <div class="label">Email</div>
+      <div class="value">sean@cushrealestate.com</div>
+    </div>
+    <div class="s10-c-item">
+      <div class="label">Office</div>
+      <div class="value">4193 Park Blvd · Oakland, CA</div>
+    </div>
+    <div class="s10-c-item">
+      <div class="label">Web</div>
+      <div class="value">cushrealestate.com/sean-walsh</div>
+    </div>
+    <div class="s10-c-item">
+      <div class="label">Instagram</div>
+      <div class="value">@SeanWalshRealEstate</div>
+    </div>
+    <div class="s10-c-item">
+      <div class="label">License</div>
+      <div class="value">DRE# 01993112</div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
